@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+#define MAX_PROCESS 10
+
+struct Process {
+    int burst_time;
+};
+
+int main() {
+    int n, quantum;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[MAX_PROCESS];
+
+    // Input burst time for each process
+    printf("Enter burst time for each process:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Burst Time for Process %d: ", i + 1);
+        scanf("%d", &processes[i].burst_time);
+    }
+
+    // Input time quantum
+    printf("Enter time quantum: ");
+    scanf("%d", &quantum);
+
+    // Simulate Round Robin scheduling
+    int current_time = 0;
+    int remaining_processes = n;
+    while (remaining_processes > 0) {
+        for (int i = 0; i < n; i++) {
+            if (processes[i].burst_time > 0) {
+                int execute_time = (processes[i].burst_time < quantum) ? processes[i].burst_time : quantum;
+                printf("Executing Process %d from time %d to %d\n", i + 1, current_time, current_time + execute_time);
+                processes[i].burst_time -= execute_time;
+                current_time += execute_time;
+                if (processes[i].burst_time == 0)
+                    remaining_processes--;
+            }
+        }
+    }
+
+    return 0;
+}
